@@ -10,7 +10,7 @@
 * Paste your teachable machine link below
 *
 */
-const URL = "https://teachablemachine.withgoogle.com/models/bp4ebeIU6/";
+const URL = "teachablemachine.withgoogle.com/models/bp4ebeIU6/";
 
 
 
