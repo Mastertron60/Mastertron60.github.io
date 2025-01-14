@@ -117,8 +117,8 @@ async function predict() {
 function checkPose1(prediction, video) {
     if (prediction.className === "pose 1" && 
         prediction.probability > 0.8 &&
-        video.currentTime >= 0.9 && 
-        video.currentTime <= 3 &&
+        video.currentTime >= 3 && 
+        video.currentTime <= 9 &&
         !pose1Triggered &&
         !explosionActive) {
         explosionActive = true;
@@ -133,8 +133,8 @@ function checkPose1(prediction, video) {
 function checkPose2(prediction, video) {
     if (prediction.className === "pose 2" && 
         prediction.probability > 0.8 &&
-        video.currentTime >= 5.5 && 
-        video.currentTime <= 7.5 &&
+        video.currentTime >= 10 && 
+        video.currentTime <= 15 &&
         !pose2Triggered &&
         !explosionActive) {
         explosionActive = true;
@@ -149,7 +149,7 @@ function checkPose2(prediction, video) {
 function checkPose3(prediction, video) {
     if (prediction.className === "pose 3" && 
         prediction.probability > 0.8) {
-        if (video.currentTime >= 11.5 && video.currentTime <= 13 && 
+        if (video.currentTime >= 16 && video.currentTime <= 23 && 
             !pose3FirstWindowTriggered && !pose3ExplosionActive) {
             pose3ExplosionActive = true;
             pose3FirstWindowTriggered = true;
@@ -157,23 +157,15 @@ function checkPose3(prediction, video) {
             setTimeout(() => {
                 pose3ExplosionActive = false;
             }, 300);
-        } else if (video.currentTime >= 17.5 && video.currentTime <= 19.5 && 
-            !pose3SecondWindowTriggered && !pose3ExplosionActive) {
-            pose3ExplosionActive = true;
-            pose3SecondWindowTriggered = true;
-            playExplosionSound();
-            setTimeout(() => {
-                pose3ExplosionActive = false;
-            }, 300);
-        }
+        } 
     }
 }
 
 function checkPose4(prediction, video) {
     if (prediction.className === "pose 4" && 
         prediction.probability > 0.8 &&
-        video.currentTime >= 15.5 && 
-        video.currentTime <= 16.6 &&
+        video.currentTime >= 24 && 
+        video.currentTime <= 27 &&
         !pose4Triggered &&
         !explosionActive) {
         explosionActive = true;
@@ -187,8 +179,8 @@ function checkPose4(prediction, video) {
 
 function checkPose5(prediction, video) {
     if (prediction.className === "pose 5" && 
-        prediction.probability > 0.8 &&
-        video.currentTime >= 19.5 &&
+        prediction.probability > 28 &&
+        video.currentTime >= 32 &&
         !pose5Triggered &&
         !explosionActive) {
         explosionActive = true;
