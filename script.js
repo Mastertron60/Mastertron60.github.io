@@ -66,7 +66,6 @@ async function init() {
         console.error("Error initializing model:", error);
     }
 }
-
 async function loop(timestamp) {
     webcam.update();
     await predict();
