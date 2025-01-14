@@ -5,20 +5,7 @@
  */
 
 // Model URL from Teachable Machine
-
-/****************************************
-* Paste your teachable machine link below
-*
-*/
-const URL = "teachablemachine.withgoogle.com/models/bp4ebeIU6/";
-
-
-
-
-
-
-
-
+const URL = "https://teachablemachine.withgoogle.com/models/bp4ebeIU6/";
 let model, webcam, ctx, labelContainer, maxPredictions;
 
 // State variables for pose detection
@@ -102,20 +89,10 @@ async function predict() {
     }
 }
 
-
-/*****************************
-*
-* You can edit your video "times" in the spaces below.
-* Note that if you are doubling up on a particular pose,
-* see pose three code.  You will have to most likely modify pose three 
-* code otherwise.
-*
-*/
-
 function checkPose1(prediction, video) {
-    if (prediction.className === "pose 1" && 
+    if (prediction.className === "pose 1" &&
         prediction.probability > 0.8 &&
-        video.currentTime >= 3 && 
+        video.currentTime >= 3 &&
         video.currentTime <= 9 &&
         !pose1Triggered &&
         !explosionActive) {
@@ -129,9 +106,9 @@ function checkPose1(prediction, video) {
 }
 
 function checkPose2(prediction, video) {
-    if (prediction.className === "pose 2" && 
+    if (prediction.className === "pose 2" &&
         prediction.probability > 0.8 &&
-        video.currentTime >= 10 && 
+        video.currentTime >= 10 &&
         video.currentTime <= 15 &&
         !pose2Triggered &&
         !explosionActive) {
@@ -143,10 +120,11 @@ function checkPose2(prediction, video) {
         }, 300);
     }
 }
+
 function checkPose3(prediction, video) {
-    if (prediction.className === "pose 3" && 
+    if (prediction.className === "pose 3" &&
         prediction.probability > 0.8 &&
-        video.currentTime >= 16 && 
+        video.currentTime >= 16 &&
         video.currentTime <= 24 &&
         !pose3Triggered &&
         !explosionActive) {
@@ -160,9 +138,9 @@ function checkPose3(prediction, video) {
 }
 
 function checkPose4(prediction, video) {
-    if (prediction.className === "pose 4" && 
+    if (prediction.className === "pose 4" &&
         prediction.probability > 0.8 &&
-        video.currentTime >= 25 && 
+        video.currentTime >= 25 &&
         video.currentTime <= 28 &&
         !pose4Triggered &&
         !explosionActive) {
@@ -176,7 +154,7 @@ function checkPose4(prediction, video) {
 }
 
 function checkPose5(prediction, video) {
-    if (prediction.className === "pose 5" && 
+    if (prediction.className === "pose 5" &&
         prediction.probability > 0.8 &&
         video.currentTime >= 29 &&
         !pose5Triggered &&
@@ -221,7 +199,7 @@ async function playInstructionVideo() {
     video.addEventListener('timeupdate', () => {
         const minutes = Math.floor(video.currentTime / 60);
         const seconds = Math.floor(video.currentTime % 60);
-        document.getElementById('videoTime').textContent = 
+        document.getElementById('videoTime').textContent =
             `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
     });
 
