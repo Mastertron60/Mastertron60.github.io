@@ -10,7 +10,7 @@
 * Paste your teachable machine link below
 *
 */
-const URL = "https://teachablemachine.withgoogle.com/models/bp4ebeIU6/";
+const URL = https://teachablemachine.withgoogle.com/models/bp4ebeIU6/;
 
 
 
@@ -66,6 +66,7 @@ async function init() {
         console.error("Error initializing model:", error);
     }
 }
+
 async function loop(timestamp) {
     webcam.update();
     await predict();
@@ -144,27 +145,27 @@ function checkPose2(prediction, video) {
         }, 300);
     }
 }
-
 function checkPose3(prediction, video) {
     if (prediction.className === "pose 3" && 
-        prediction.probability > 0.8) {
-        if (video.currentTime >= 16 && video.currentTime <= 23 && 
-            !pose3FirstWindowTriggered && !pose3ExplosionActive) {
-            pose3ExplosionActive = true;
-            pose3FirstWindowTriggered = true;
-            playExplosionSound();
-            setTimeout(() => {
-                pose3ExplosionActive = false;
-            }, 300);
-        } 
+        prediction.probability > 0.8 &&
+        video.currentTime >= 16 && 
+        video.currentTime <= 24 &&
+        !pose3Triggered &&
+        !explosionActive) {
+        explosionActive = true;
+        pose3Triggered = true;
+        playExplosionSound();
+        setTimeout(() => {
+            explosionActive = false;
+        }, 300);
     }
 }
 
 function checkPose4(prediction, video) {
     if (prediction.className === "pose 4" && 
         prediction.probability > 0.8 &&
-        video.currentTime >= 24 && 
-        video.currentTime <= 27 &&
+        video.currentTime >= 25 && 
+        video.currentTime <= 28 &&
         !pose4Triggered &&
         !explosionActive) {
         explosionActive = true;
@@ -178,8 +179,8 @@ function checkPose4(prediction, video) {
 
 function checkPose5(prediction, video) {
     if (prediction.className === "pose 5" && 
-        prediction.probability > 28 &&
-        video.currentTime >= 32 &&
+        prediction.probability > 0.8 &&
+        video.currentTime >= 29 &&
         !pose5Triggered &&
         !explosionActive) {
         explosionActive = true;
