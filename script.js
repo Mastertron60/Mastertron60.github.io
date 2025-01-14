@@ -10,7 +10,7 @@
 * Paste your teachable machine link below
 *
 */
-const URL = https://teachablemachine.withgoogle.com/models/bp4ebeIU6/;
+const URL = "https://teachablemachine.withgoogle.com/models/bp4ebeIU6/";
 
 
 
@@ -23,12 +23,10 @@ let model, webcam, ctx, labelContainer, maxPredictions;
 
 // State variables for pose detection
 let explosionActive = false;
-let pose3ExplosionActive = false;
 let explosionSound = new Audio('explsn.mp3');
 let pose1Triggered = false;
 let pose2Triggered = false;
-let pose3FirstWindowTriggered = false;
-let pose3SecondWindowTriggered = false;
+let pose3Triggered = false;
 let pose4Triggered = false;
 let pose5Triggered = false;
 
