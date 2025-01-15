@@ -107,6 +107,8 @@ function checkPose(prediction, video) {
     if (!poseStates[`pose${poseNumber}`]) {
         poseStates[`pose${poseNumber}`] = {
             triggered: false,
+            firstWindowTriggered: false,
+            secondWindowTriggered: false
         };
     }
 
@@ -115,27 +117,35 @@ function checkPose(prediction, video) {
 
         switch(poseNumber) {
             case '1':
-                if (time >= 3.0 && time <= 9.0 && !poseState.triggered) {
+                if (time >= 0.9 && time <= 3.0 && !poseState.triggered) {
                     triggerExplosion(poseState);
                 }
                 break;
             case '2':
-                if (time >= 10.0 && time <= 15.0 && !poseState.triggered) {
+                if (time >= 5.5 && time <= 7.5 && !poseState.triggered) {
                     triggerExplosion(poseState);
                 }
                 break;
             case '3':
-                if ((time >= 16.0 && time <= 24.0 && !poseState.firstWindowTriggered){
-                    triggerExplosion(poseState);
+                if ((time >= 11.5 && time <= 13.0 && !poseState.firstWindowTriggered) ||
+                    (time >= 17.5 && time <= 19.5 && !poseState.secondWindowTriggered)) {
+                    if (time <= 13.0) {
+                        poseState.firstWindowTriggered = true;
+                    } else {
+                        poseState.secondWindowTriggered = true;
+                    }
+                    explosionActive = true;
+                    playExplosionSound();
+                    setTimeout(() => { explosionActive = false; }, 300);
                 }
                 break;
             case '4':
-                if (time >= 25.0 && time <= 28.0 && !poseState.triggered) {
+                if (time >= 15.5 && time <= 16.6 && !poseState.triggered) {
                     triggerExplosion(poseState);
                 }
                 break;
             case '5':
-                if (time >= 29.0 && !poseState.triggered) {
+                if (time >= 19.5 && !poseState.triggered) {
                     triggerExplosion(poseState);
                 }
                 break;
@@ -234,7 +244,8 @@ function stopInstructionVideo() {
     }
     pose1Triggered = false;
     pose2Triggered = false;
-    pose3Triggered = false
+    pose3FirstWindowTriggered = false;
+    pose3SecondWindowTriggered = false;
     pose4Triggered = false;
     pose5Triggered = false;
 }
