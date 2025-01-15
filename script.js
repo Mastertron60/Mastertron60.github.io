@@ -27,7 +27,7 @@ async function init() {
     const video = document.getElementById('instructionVideo');
     video.volume = 0.4;
 
-    try {
+ try {
         model = await tmPose.load(modelURL, metadataURL);
         maxPredictions = model.getTotalClasses();
 
@@ -169,7 +169,7 @@ function checkPose5(prediction, video) {
 }
 
 function drawPose(pose, explode) {
-    const shouldExplode = explode || pose3ExplosionActive;
+    const shouldExplode = explode;
     if (webcam.canvas) {
         ctx.drawImage(webcam.canvas, 0, 0);
         if (pose) {
