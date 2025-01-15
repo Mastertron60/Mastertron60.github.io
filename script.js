@@ -1,3 +1,4 @@
+
 /**
  * Pose Detection Application
  * Using TensorFlow.js and Teachable Machine
@@ -5,18 +6,26 @@
  */
 
 // Model URL from Teachable Machine
-const URL = "https://teachablemachine.withgoogle.com/models/bp4ebeIU6/";
+//**************************************************
+//* as before, paste your lnk below
+let URL = "https://teachablemachine.withgoogle.com/models/bp4ebeIU6/";
+
+
+
+
 let model, webcam, ctx, labelContainer, maxPredictions;
 
-// State variables for pose detection
+// Dynamic pose tracking
+let poseStates = {};
 let explosionActive = false;
-let pose3ExplosionActive = false;
 let explosionSound = new Audio('explsn.mp3');
-let pose1Triggered = false;
-let pose2Triggered = false;
-let pose3Triggered = false;
-let pose4Triggered = false;
-let pose5Triggered = false;
+
+function setModelURL(url) {
+    URL = url;
+    // Reset states when URL changes
+    poseStates = {};
+    explosionActive = false;
+}
 
 /**
  * Initialize the application
@@ -76,12 +85,8 @@ async function predict() {
                 prediction[i].className + ": " + prediction[i].probability.toFixed(2);
             labelContainer.childNodes[i].innerHTML = classPrediction;
 
-            // Check for different poses
-            checkPose1(prediction[0], video);
-            checkPose2(prediction[i], video);
-            checkPose3(prediction[i], video);
-            checkPose4(prediction[i], video);
-            checkPose5(prediction[i], video);
+            // Check pose dynamically
+            checkPose(prediction[i], video);
         }
 
         drawPose(pose, explosionActive);
@@ -90,92 +95,70 @@ async function predict() {
     }
 }
 
-function checkPose1(prediction, video) {
-    if (prediction.className === "pose 1" &&
-        prediction.probability > 0.8 &&
-        video.currentTime >= 3 &&
-        video.currentTime <= 9 &&
-        !pose1Triggered &&
-        !explosionActive) {
-        explosionActive = true;
-        pose1Triggered = true;
-        playExplosionSound();
-        setTimeout(() => {
-            explosionActive = false;
-        }, 300);
+function checkPose(prediction, video) {
+    const time = video.currentTime;
+    const prob = prediction.probability;
+    
+    // Only respond to pose1 through pose5 labels
+    const poseNumber = prediction.className.toLowerCase().replace(/[^0-9]/g, '');
+    const isPoseLabel = prediction.className.toLowerCase().includes('pose') && poseNumber >= 1 && poseNumber <= 5;
+    
+    if (!isPoseLabel) return;
+    
+    if (!poseStates[`pose${poseNumber}`]) {
+        poseStates[`pose${poseNumber}`] = {
+            triggered: false,
+            firstWindowTriggered: false,
+            secondWindowTriggered: false
+        };
+    }
+
+    if (prob > 0.8 && !explosionActive) {
+        const poseState = poseStates[`pose${poseNumber}`];
+        
+        switch(poseNumber) {
+            case '1':
+                if (time >= 3.0 && time <= 9.0 && !poseState.triggered) {
+                    triggerExplosion(poseState);
+                }
+                break;
+            case '2':
+                if (time >= 10.0 && time <= 15.0 && !poseState.triggered) {
+                    triggerExplosion(poseState);
+                }
+                break;
+            case '3':
+                if (time >= 16.0 && time <= 24.0 && !poseState.triggered) {
+                    triggerExplosion(poseState);
+                }
+                break;
+            case '4':
+                if (time >= 25.0 && time <= 28.0 && !poseState.triggered) {
+                    triggerExplosion(poseState);
+                }
+                break;
+            case '5':
+                if (time >= 29.0 && !poseState.triggered) {
+                    triggerExplosion(poseState);
+                }
+                break;
+        }
     }
 }
 
-function checkPose2(prediction, video) {
-    if (prediction.className === "pose 2" &&
-        prediction.probability > 0.8 &&
-        video.currentTime >= 10 &&
-        video.currentTime <= 15 &&
-        !pose2Triggered &&
-        !explosionActive) {
-        explosionActive = true;
-        pose2Triggered = true;
-        playExplosionSound();
-        setTimeout(() => {
-            explosionActive = false;
-        }, 300);
-    }
-}
-
-function checkPose3(prediction, video) {
-    if (prediction.className === "pose 3" &&
-        prediction.probability > 0.8 &&
-        video.currentTime >= 16 &&
-        video.currentTime <= 24 &&
-        !pose3Triggered &&
-        !explosionActive) {
-        explosionActive = true;
-        pose3Triggered = true;
-        playExplosionSound();
-        setTimeout(() => {
-            explosionActive = false;
-        }, 300);
-    }
-}
-
-function checkPose4(prediction, video) {
-    if (prediction.className === "pose 4" &&
-        prediction.probability > 0.8 &&
-        video.currentTime >= 25 &&
-        video.currentTime <= 28 &&
-        !pose4Triggered &&
-        !explosionActive) {
-        explosionActive = true;
-        pose4Triggered = true;
-        playExplosionSound();
-        setTimeout(() => {
-            explosionActive = false;
-        }, 300);
-    }
-}
-
-function checkPose5(prediction, video) {
-    if (prediction.className === "pose 5" &&
-        prediction.probability > 0.8 &&
-        video.currentTime >= 29 &&
-        !pose5Triggered &&
-        !explosionActive) {
-        explosionActive = true;
-        pose5Triggered = true;
-        playExplosionSound();
-        setTimeout(() => {
-            explosionActive = false;
-        }, 300);
-    }
+function triggerExplosion(poseState) {
+    explosionActive = true;
+    poseState.triggered = true;
+    playExplosionSound();
+    setTimeout(() => { explosionActive = false; }, 300);
 }
 
 function drawPose(pose, explode) {
-    const shouldExplode = explode;
     if (webcam.canvas) {
         ctx.drawImage(webcam.canvas, 0, 0);
         if (pose) {
             const minPartConfidence = 0.5;
-            if (shouldExplode) {
+            if (explode) {
                 pose.keypoints.forEach(keypoint => {
                     if (keypoint.score > minPartConfidence) {
                         const scale = 3;
@@ -195,12 +178,14 @@ function drawPose(pose, explode) {
 
 async function playInstructionVideo() {
     const video = document.getElementById('instructionVideo');
+    const videoSrc = video.getAttribute('data-video-src') || 'vid.mp4';
+    video.src = videoSrc;
     const videoContainer = video.parentElement;
 
     video.addEventListener('timeupdate', () => {
         const minutes = Math.floor(video.currentTime / 60);
         const seconds = Math.floor(video.currentTime % 60);
-        document.getElementById('videoTime').textContent =
+        document.getElementById('videoTime').textContent = 
             `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
     });
 
@@ -252,7 +237,8 @@ function stopInstructionVideo() {
     }
     pose1Triggered = false;
     pose2Triggered = false;
-    pose3Triggered = false;
+    pose3FirstWindowTriggered = false;
+    pose3SecondWindowTriggered = false;
     pose4Triggered = false;
     pose5Triggered = false;
 }
