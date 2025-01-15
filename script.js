@@ -108,8 +108,6 @@ function checkPose(prediction, video) {
     if (!poseStates[`pose${poseNumber}`]) {
         poseStates[`pose${poseNumber}`] = {
             triggered: false,
-            firstWindowTriggered: false,
-            secondWindowTriggered: false
         };
     }
 
@@ -237,8 +235,7 @@ function stopInstructionVideo() {
     }
     pose1Triggered = false;
     pose2Triggered = false;
-    pose3FirstWindowTriggered = false;
-    pose3SecondWindowTriggered = false;
+    pose3Triggered = false;
     pose4Triggered = false;
     pose5Triggered = false;
 }
