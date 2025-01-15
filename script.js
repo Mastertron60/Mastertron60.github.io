@@ -1,4 +1,3 @@
-
 /**
  * Pose Detection Application
  * Using TensorFlow.js and Teachable Machine
@@ -98,13 +97,13 @@ async function predict() {
 function checkPose(prediction, video) {
     const time = video.currentTime;
     const prob = prediction.probability;
-    
+
     // Only respond to pose1 through pose5 labels
     const poseNumber = prediction.className.toLowerCase().replace(/[^0-9]/g, '');
     const isPoseLabel = prediction.className.toLowerCase().includes('pose') && poseNumber >= 1 && poseNumber <= 5;
-    
+
     if (!isPoseLabel) return;
-    
+
     if (!poseStates[`pose${poseNumber}`]) {
         poseStates[`pose${poseNumber}`] = {
             triggered: false,
@@ -113,7 +112,7 @@ function checkPose(prediction, video) {
 
     if (prob > 0.8 && !explosionActive) {
         const poseState = poseStates[`pose${poseNumber}`];
-        
+
         switch(poseNumber) {
             case '1':
                 if (time >= 3.0 && time <= 9.0 && !poseState.triggered) {
@@ -126,7 +125,7 @@ function checkPose(prediction, video) {
                 }
                 break;
             case '3':
-                if (time >= 16.0 && time <= 24.0 && !poseState.triggered) {
+                if ((time >= 16.0 && time <= 24.0 && !poseState.firstWindowTriggered){
                     triggerExplosion(poseState);
                 }
                 break;
@@ -221,7 +220,7 @@ async function playInstructionVideo() {
     if (model) {
         processFrame();
     } else {
-        console.log("Please start webcam first to load the model");
+        console.log("https://teachablemachine.withgoogle.com/models/bp4ebeIU6/");
     }
 }
 
@@ -235,7 +234,7 @@ function stopInstructionVideo() {
     }
     pose1Triggered = false;
     pose2Triggered = false;
-    pose3Triggered = false;
+    pose3Triggered = false
     pose4Triggered = false;
     pose5Triggered = false;
 }
