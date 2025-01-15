@@ -10,6 +10,7 @@ let model, webcam, ctx, labelContainer, maxPredictions;
 
 // State variables for pose detection
 let explosionActive = false;
+let pose3ExplosionActive = false;
 let explosionSound = new Audio('explsn.mp3');
 let pose1Triggered = false;
 let pose2Triggered = false;
@@ -27,7 +28,7 @@ async function init() {
     const video = document.getElementById('instructionVideo');
     video.volume = 0.4;
 
- try {
+    try {
         model = await tmPose.load(modelURL, metadataURL);
         maxPredictions = model.getTotalClasses();
 
