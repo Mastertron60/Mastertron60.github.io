@@ -34,7 +34,7 @@ async function init() {
     const metadataURL = URL + "metadata.json";
 
     const video = document.getElementById('instructionVideo');
-    video.volume = 0.4;
+    video.volume = 0.2;
 
     try {
         model = await tmPose.load(modelURL, metadataURL);
