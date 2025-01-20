@@ -110,7 +110,7 @@ function checkPose(prediction, video) {
         };
     }
 
-    if (prob > 0.7 && !explosionActive) {
+    if (prob > 0.6 && !explosionActive) {
         const poseState = poseStates[`pose${poseNumber}`];
 
         switch(poseNumber) {
@@ -136,7 +136,7 @@ function checkPose(prediction, video) {
                 }
                 break;
             case '5':
-                if (time >= 29.0 && !poseState.triggered) {
+                if (time >= 28.0 && !poseState.triggered) {
                     triggerExplosion(poseState);
                 }
                 break;
